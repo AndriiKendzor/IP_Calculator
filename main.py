@@ -2,6 +2,9 @@ from flask import Flask
 import re
 import math
 
+
+
+'''
 #Перевірка IP на цифри і точки
 def validate_ip_address(ip):
     ip_pattern = re.compile(r'^(\d{1,3}\.){3}\d{1,3}$')
@@ -10,59 +13,127 @@ def validate_ip_address(ip):
         print("IP-адреса валідна.")
     else:
         print("IP-адреса не відповідає очікуваному формату.")
+'''
 
 
-#Визначення класи IP
+#Перевірка та визначення класи IP
 def get_ip_class(ip):
-    ip_pattern = re.compile(r'^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$')
-    match = ip_pattern.match(ip)
+    ip_pattern = re.compile(r'^(\d{1,3})\.')
+    first_octet = int(ip_pattern.search(ip).group(1))
 
-    if match:
-        first_octet = int(match.group(1))
-
-        if 1 <= first_octet <= 127:
-            return 'IP класу A'
-        elif 128 <= first_octet <= 191:
-            return 'IP класу B'
-        elif 192 <= first_octet <= 223:
-            return 'IP класу C'
-        elif 224 <= first_octet <= 239:
-            return 'IP класу D'
-        elif 240 <= first_octet <= 255:
-            return 'IP класу E'
-        else:
-            return 'Інший клас IP'
+    if 1 <= first_octet <= 127:
+        return 'A'
+    elif 128 <= first_octet <= 191:
+        return 'B'
+    elif 192 <= first_octet <= 223:
+        return 'C'
+    elif 224 <= first_octet <= 239:
+        return 'D'
+    elif 240 <= first_octet <= 255:
+        return 'E'
     else:
-        return 'Не валідний формат IP'
+        return '-'
 
 
 #Обчислення найближчої білшої степені
-def find_power_of_two(number):
-    if number > 0:
-        power = math.ceil(math.log2(number + 2)) #Добовляем 2 на Network i Rozgłoszeniowy
+def find_power_of_two(host_count):
+    if host_count > 0:
+        power = math.ceil(math.log2(host_count + 2)) #Добовляем 2 на Network i Rozgłoszeniowy
         return power
     else:
         return "Введене число має бути більше 0."
 
 
-#Приймаємо інформацію
-#ip
+#Перевірка хоста класи C
+def validate_host_C(host_count):
+    if host_count>254:
+        print("Не вірна кількість хостів для ip класи C")
+
+
+#Шукажмо класу С
+# Поиск для класса C
+def find_c(ip, pow2):
+    ip_pattern = re.compile(r'^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$')
+    match = ip_pattern.match(ip)
+    last_number_ip = int(match.group(4))
+
+    licznik_podsieci = 0
+    last_subnet_printed = False
+
+    while last_number_ip < 256:
+        licznik_podsieci += 1
+
+        N = last_number_ip
+        H1 = N + 1
+
+        last_number_ip = last_number_ip + pow2
+
+        H_ost = last_number_ip - 2
+        R = last_number_ip - 1
+
+        if last_number_ip >= 256:
+            if not last_subnet_printed:
+                print(f"ost. {licznik_podsieci}p:")
+                last_subnet_printed = True
+            print(f"ost. N: {N}; 1H: {H1}; ostH: {H_ost}; R:{R};")
+        else:
+            print(f"{licznik_podsieci}p:")
+            print(f"N: {N}; 1H: {H1}; ostH: {H_ost}; R:{R};")
+
+
+'''
+Це на мою думку буде лишнє бо ми перевіряємо Ip в get_ip_class   
+validate_ip_address(ip_address)
+'''
+
+#Приймаємо ip
 ip_address = input("Введіть IP-адресу: ")
 
-#host
+#Приймаємо host
 try:
     host_count = int(input("Введіть кількість хостів: "))
 except ValueError:
     print("Введене значення не є цілим числом.")
 
-
-#Перевірка ip
-validate_ip_address(ip_address)
-
-#Класа ip
-ip_class = get_ip_class(ip_address)
-print(f"IP-адреса належить до {ip_class}")
-
 #Степінь 2
 power_of_two = find_power_of_two(host_count)
 print(f"Кількість хостів поміщається в 2^{power_of_two} = {2**power_of_two}")
+
+
+#Перевірка ip та вибір класи
+ip_class = get_ip_class(ip_address)
+print(f"\nIP-адреса належить до класи {ip_class}")
+
+
+
+#Вибір відповідної функції
+if ip_class =='C':
+    print("Маска за замовчуванням 255.255.255.0\n")
+    #Перевіряємо
+    validate_host_C(host_count)
+    # Обчислити класу С
+    find_c(ip_address, 2**power_of_two)
+
+elif ip_class == 'B':
+    print("Маска за замовчуванням 255.255.0.0")
+    # Обчислити класу B
+    pass
+elif ip_class == 'A':
+    print("Маска за замовчуванням 255.0.0.0")
+    # Обчислити класу A
+    pass
+elif ip_class == 'D':
+    print("Даний IP належить до зарезервованої класи D")
+elif ip_class == 'E':
+    print("Даний IP належить до зарезервованої класи E")
+else:
+    print("Не валідний формат IP")
+
+
+
+
+
+#binary test
+'''decimal_number = 7
+binary_str = bin(decimal_number)
+print(binary_str)'''
