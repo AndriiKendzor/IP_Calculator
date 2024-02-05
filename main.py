@@ -80,7 +80,10 @@ def find_c(ip, pow2):
             if not last_subnet_printed:
                 print(f"❗ ost. {licznik_podsieci}p:")
                 last_subnet_printed = True
+                #Maska
+                maska_koncowa = f"{N}"
             print(f"ost. N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R:{first_three_octets}.{R};")
+            print(f"🎭 Маска - 255.255.255.{maska_koncowa}")
         else:
             print(f"{licznik_podsieci}p:")
             print(f"N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R:{first_three_octets}.{R};")
@@ -129,22 +132,31 @@ def find_B(ip, pow2):
 
         #bN_last - третя цифра після обчислень
         if thrid_number_ip >= 1:
-            bN_last = thrid_number_ip-1
+            bN_last = thrid_number_ip
+            #Тут я изминил ту ошибку, при которой где-то выводилось 255, а где-то 256
+            if thrid_number_ip >= 256:
+                bN_last = thrid_number_ip -1
         else:
             bN_last = thrid_number_ip
 
         cH_ost = last_number_ip - 2
         cR = last_number_ip - 1
 
-    #вывожу в консоль все подсети + последний ОТДЕЛЬНО с эмодзи
-        if last_number_ip and thrid_number_ip >= 256:
+    #Вывожу в консоль все подсети + последний ОТДЕЛЬНО с эмодзи
+        if last_number_ip >= 255 and thrid_number_ip >= 255:
             if not last_subnet_printed:
                 print(f"❗ ost. {licznik_podsieci}p:")
+                #Maska
+                maska_koncowa = f"{bN_first}.{cN}"
                 last_subnet_printed = True
-            print(f"ostH: {bN_last}.{cH_ost}; R:{bN_last}.{cR};")
+            print(f"N: {bN_first}.{cN}; 1H: {bN_first}.{cH1}; ostH: {bN_last}.{cH_ost}; R:{bN_last}.{cR};")
+            print(f"🎭 Маска - 255.255.{maska_koncowa}")
+
         else:
             print(f"{licznik_podsieci}p:")
-            print(f"ostH: {bN_last}.{cH_ost}; R:{bN_last}.{cR};")
+            print(f"N: {bN_first}.{cN}; 1H: {bN_first}.{cH1}; ostH: {bN_last}.{cH_ost}; R:{bN_last}.{cR};")
+
+
 
 
 
