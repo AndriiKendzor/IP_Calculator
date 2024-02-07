@@ -286,9 +286,10 @@ ip_address = input("Введіть IP-адресу: ")
 
 #Приймаємо host
 try:
-    host_count = int(input("Введіть кількість хостів: "))
+    host_count = int(input("Введіть кількість хостів/подсетів: "))
 except ValueError:
     print("Введене значення не є цілим числом.")
+
 
 #Степінь 2
 var = True  #варифікація
@@ -304,6 +305,20 @@ ip_class = get_ip_class(ip_address)
 print(f"\nIP-адреса належить до класи {ip_class}")
 
 
+# Подсеті (тест) -----------------------------------------
+new_pow = 0;
+dec = int(input("1 - хости  2 - подсеті "))
+if dec == 2:
+    if ip_class == 'C':
+        new_pow = 8 - power_of_two;
+    elif ip_class == 'B':
+        new_pow = 16 - power_of_two;
+    elif ip_class == 'A':
+        new_pow = 24 - power_of_two;
+
+    power_of_two = new_pow;
+
+# -------------------------------------------------------
 
 #Вибір відповідної функції
 if ip_class =='C':
