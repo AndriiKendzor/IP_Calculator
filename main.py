@@ -34,6 +34,13 @@ def get_ip_class(ip):
     else:
         return '-'
 
+#Перевірка хоста класи C
+def validate_host(host_count):
+    if host_count <= 0:
+        print("Не вірна кількість хостів")
+        return False
+    else:
+        return True
 
 #Обчислення найближчої білшої степені
 def find_power_of_two(host_count):
@@ -46,7 +53,7 @@ def find_power_of_two(host_count):
 
 #Перевірка хоста класи C
 def validate_host_C(host_count):
-    if host_count>254:
+    if host_count > 254:
         print("Не вірна кількість хостів для ip класи C")
         return False
     else:
@@ -78,23 +85,24 @@ def find_c(ip, pow2):
 
         if last_number_ip >= 256:
             if not last_subnet_printed:
-                print(f"ost. {licznik_podsieci}p:")
+                print(f"❗ ost. {licznik_podsieci}p:")
                 last_subnet_printed = True
-            print(f"ost. N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R:{first_three_octets}.{R};")
+                #Maska
+                maska_koncowa = f"{N}"
+            print(f"ost. N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R: {first_three_octets}.{R};")
+            print(f"🎭 Маска - 255.255.255.{maska_koncowa}")
         else:
             print(f"{licznik_podsieci}p:")
-            print(f"N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R:{first_three_octets}.{R};")
-
+            print(f"N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R: {first_three_octets}.{R};")
 
 
 #Перевірка хоста класи B
 def validate_host_B(host_count):
-    if host_count>65534:
+    if host_count > 65534:
         print("Не вірна кількість хостів для ip класи B")
         return False
     else:
         return True
-
 
 
 #Шукажмо класу B
@@ -107,23 +115,21 @@ def find_B(ip, pow2):
     thrid_number_ip = int(match.group(3))
 
     licznik_podsieci = 0
-    #last_subnet_printed = False
+    last_subnet_printed = False
 
-    #first_three_octets = f"{match.group(1)}.{match.group(2)}.{match.group(3)}"
+    first_two_octets = f"{match.group(1)}.{match.group(2)}"
 
     while thrid_number_ip < 256:
         licznik_podsieci += 1
-
-
 
         cN = last_number_ip
         cH1 = cN + 1
 
         #bN_first - третя цифра до обчислень
-        bN_first = thrid_number_ip;
+        bN_first = thrid_number_ip
 
         #перевіряємо чи степінь більша 256 бо інакше до останньої цифри додасть 512 чи 1024 ...  - (вона вийде за межі 255)
-        if pow2 > 256:
+        if pow2 >= 256:
             step = pow2/256
             thrid_number_ip += int(step)
             last_number_ip = last_number_ip + 256
@@ -131,30 +137,145 @@ def find_B(ip, pow2):
         else:
             last_number_ip = last_number_ip + pow2
 
+
         #bN_last - третя цифра після обчислень
-        if thrid_number_ip >= 1:
-            bN_last = thrid_number_ip-1
-        else:
+        if last_number_ip >= 255 and thrid_number_ip > bN_first:
+            bN_last = thrid_number_ip-1 #ми віднімаємо 1 бо без цього не коректно показує результат типу  1p ... R: 3.255; 2p N: 3.0; ....
+        else:                           #через те що ми відняли 1 буде показувати правильно тобто  1p ... R: 2.255; 2p N: 3.0; ....
             bN_last = thrid_number_ip
 
         cH_ost = last_number_ip - 2
         cR = last_number_ip - 1
 
+    #Вывожу в консоль все подсети + последний ОТДЕЛЬНО с эмодзи
+        if last_number_ip >= 255 and thrid_number_ip >= 255:
+            if not last_subnet_printed:
+                print(f"❗ ost. {licznik_podsieci}p:")
+                #Maska
+                maska_koncowa = f"{bN_first}.{cN}"
+                last_subnet_printed = True
+            print(f"N: {first_two_octets}.{bN_first}.{cN}; 1H: {first_two_octets}.{bN_first}.{cH1}; ostH: {first_two_octets}.{bN_last}.{cH_ost}; R: {first_two_octets}.{bN_last}.{cR};")
+            print(f"🎭 Маска - 255.255.{maska_koncowa}")
+
+        else:
+            print(f"{licznik_podsieci}p:")
+            print(f"N: {first_two_octets}.{bN_first}.{cN}; 1H: {first_two_octets}.{bN_first}.{cH1}; ostH: {first_two_octets}.{bN_last}.{cH_ost}; R: {first_two_octets}.{bN_last}.{cR};")
 
 
-        print(f"{licznik_podsieci}p:")
-        print(f"N: {bN_first}.{cN}; 1H: {bN_first}.{cH1}; ostH: {bN_last}.{cH_ost}; R:{bN_last}.{cR};")
 
         #обнуляємо останню цифру ip
-        if pow2 > 256:
+        if pow2 >= 256:
             last_number_ip = 0
 
         if last_number_ip >= 256:
-
             last_number_ip = 0
-            thrid_number_ip += 1;
+            thrid_number_ip += 1
 
 
+
+
+#Перевірка хоста класи A
+def validate_host_A(host_count):
+    if host_count > 16777214:
+        print("Не вірна кількість хостів для ip класи A")
+        return False
+    else:
+        return True
+
+
+
+#Шукажмо класу A
+# Поиск для класса A
+def find_A(ip, pow2):
+    ip_pattern = re.compile(r'^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$')
+    match = ip_pattern.match(ip)
+
+    last_number_ip = int(match.group(4))
+    thrid_number_ip = int(match.group(3))
+    second_number_ip = int(match.group(2))
+
+    licznik_podsieci = 0
+    last_subnet_printed = False
+
+    first_octet = f"{match.group(1)}"
+
+    while second_number_ip < 256:
+        licznik_podsieci += 1
+
+        cN = last_number_ip
+        cH1 = cN + 1
+
+        #bN_first - третя цифра до обчислень
+        bN_first = thrid_number_ip
+
+        #aN_first - друга цифра ip до обчислення
+        aN_first = second_number_ip
+
+
+        if pow2 >= 65536:
+            step_a = pow2 / 65536
+            second_number_ip +=int(step_a)
+            thrid_number_ip = thrid_number_ip + 256
+            last_number_ip = last_number_ip + 256
+
+        elif pow2 >= 256 and pow2 < 65536:
+            step_b = pow2 / 256
+            thrid_number_ip += int(step_b)
+            last_number_ip = last_number_ip + 256
+        elif pow2 < 256:
+            last_number_ip = last_number_ip + pow2
+
+        # aN_last - друга цифра після обчислень
+        if thrid_number_ip >= 255 and second_number_ip > aN_first:
+            aN_last = second_number_ip-1
+        else:
+            aN_last = second_number_ip
+
+
+        #bN_last - третя цифра після обчислень
+        if last_number_ip >= 255 and thrid_number_ip > bN_first:
+            bN_last = thrid_number_ip-1
+        else:
+            bN_last = thrid_number_ip
+
+
+
+        cH_ost = last_number_ip - 2
+        cR = last_number_ip - 1
+
+    #Вывожу в консоль все подсети + последний ОТДЕЛЬНО с эмодзи
+        if last_number_ip >= 255 and thrid_number_ip >= 255 and second_number_ip >= 255:
+            if not last_subnet_printed:
+                print(f"❗ ost. {licznik_podsieci}p:")
+                #Maska
+                maska_koncowa = f"{aN_first}.{bN_first}.{cN}"
+                last_subnet_printed = True
+
+            print(f"N: {first_octet}.{aN_first}.{bN_first}.{cN}; 1H: {first_octet}.{aN_first}.{bN_first}.{cH1}; ostH: {first_octet}.{aN_last}.{bN_last}.{cH_ost}; R: {first_octet}.{aN_last}.{bN_last}.{cR};")
+            print(f"🎭 Маска - 255.{maska_koncowa}")
+
+        else:
+            print(f"{licznik_podsieci}p:")
+            print(f"N: {first_octet}.{aN_first}.{bN_first}.{cN}; 1H: {first_octet}.{aN_first}.{bN_first}.{cH1}; ostH: {first_octet}.{aN_last}.{bN_last}.{cH_ost}; R: {first_octet}.{aN_last}.{bN_last}.{cR};")
+
+
+
+        #обнуляємо останню цифру ip
+        if pow2 >= 256 and pow2 < 65536:
+            last_number_ip = 0
+
+        if pow2 >= 65536:
+            thrid_number_ip = 0
+            last_number_ip = 0
+
+        if last_number_ip >= 256:
+            last_number_ip = 0
+            thrid_number_ip += 1
+
+        if thrid_number_ip >= 256:
+            last_number_ip = 0
+            thrid_number_ip = 0
+            second_number_ip += 1
 '''
 Це на мою думку буде лишнє бо ми перевіряємо Ip в get_ip_class   
 validate_ip_address(ip_address)
@@ -170,7 +291,11 @@ except ValueError:
     print("Введене значення не є цілим числом.")
 
 #Степінь 2
-power_of_two = find_power_of_two(host_count)
+var = True  #варифікація
+var = validate_host(host_count)
+if var == True:
+    power_of_two = find_power_of_two(host_count)
+
 print(f"Кількість хостів поміщається в 2^{power_of_two} = {2**power_of_two}")
 
 
@@ -179,7 +304,7 @@ ip_class = get_ip_class(ip_address)
 print(f"\nIP-адреса належить до класи {ip_class}")
 
 
-var = True  #варифікація
+
 #Вибір відповідної функції
 if ip_class =='C':
     print("Маска за замовчуванням 255.255.255.0\n")
@@ -193,14 +318,18 @@ elif ip_class == 'B':
     print("Маска за замовчуванням 255.255.0.0")
     # Перевіряємо
     var = validate_host_B(host_count)
-    # Обчислити класу С
+    # Обчислити класу B
     if var == True:
         find_B(ip_address, 2 ** power_of_two)
 
 elif ip_class == 'A':
     print("Маска за замовчуванням 255.0.0.0")
+    #Перевіпряємо
+    var = validate_host_A(host_count)
     # Обчислити класу A
-    pass
+    if var == True:
+        find_A(ip_address, 2 ** power_of_two)
+
 elif ip_class == 'D':
     print("Даний IP належить до зарезервованої класи D")
 elif ip_class == 'E':
