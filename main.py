@@ -1,6 +1,13 @@
-from flask import Flask
+from flask import Flask, render_template
 import re
 import math
+
+app = Flask(__name__)
+
+
+app.route('/')
+def index():
+    return render_template("index.html")
 
 
 
@@ -360,7 +367,8 @@ else:
 
 
 
-
+if __name__ == "__main__":
+    app.run(debug=True)
 
 #binary test
 '''decimal_number = 7
