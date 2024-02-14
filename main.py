@@ -91,7 +91,7 @@ def find_c(ip, pow2):
                 maska_koncowa = f"{N}"
             print(f"ost. N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R: {first_three_octets}.{R};")
             print(f"🎭 Маска - 255.255.255.{maska_koncowa}")
-        else:
+        elif licznik_podsieci == 1 or licznik_podsieci == 2 or licznik_podsieci == 3:
             print(f"{licznik_podsieci}p:")
             print(f"N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R: {first_three_octets}.{R};")
 
@@ -157,7 +157,8 @@ def find_B(ip, pow2):
             print(f"N: {first_two_octets}.{bN_first}.{cN}; 1H: {first_two_octets}.{bN_first}.{cH1}; ostH: {first_two_octets}.{bN_last}.{cH_ost}; R: {first_two_octets}.{bN_last}.{cR};")
             print(f"🎭 Маска - 255.255.{maska_koncowa}")
 
-        else:
+
+        elif licznik_podsieci == 1 or licznik_podsieci == 2 or licznik_podsieci == 3:
             print(f"{licznik_podsieci}p:")
             print(f"N: {first_two_octets}.{bN_first}.{cN}; 1H: {first_two_octets}.{bN_first}.{cH1}; ostH: {first_two_octets}.{bN_last}.{cH_ost}; R: {first_two_octets}.{bN_last}.{cR};")
 
@@ -254,7 +255,8 @@ def find_A(ip, pow2):
             print(f"N: {first_octet}.{aN_first}.{bN_first}.{cN}; 1H: {first_octet}.{aN_first}.{bN_first}.{cH1}; ostH: {first_octet}.{aN_last}.{bN_last}.{cH_ost}; R: {first_octet}.{aN_last}.{bN_last}.{cR};")
             print(f"🎭 Маска - 255.{maska_koncowa}")
 
-        else:
+
+        elif licznik_podsieci == 1 or licznik_podsieci == 2 or licznik_podsieci == 3:
             print(f"{licznik_podsieci}p:")
             print(f"N: {first_octet}.{aN_first}.{bN_first}.{cN}; 1H: {first_octet}.{aN_first}.{bN_first}.{cH1}; ostH: {first_octet}.{aN_last}.{bN_last}.{cH_ost}; R: {first_octet}.{aN_last}.{bN_last}.{cR};")
 
@@ -315,6 +317,10 @@ if dec == 2:
         new_pow = 16 - power_of_two
     elif ip_class == 'A':
         new_pow = 24 - power_of_two
+
+    #знайшов баг коли new_pow = 1 або 0 то програма не коректно працює
+    if new_pow == 1 or new_pow == 0:
+        new_pow = 2
 
     power_of_two = new_pow
 
