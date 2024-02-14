@@ -1,9 +1,9 @@
-@import "_utils";
-@import "_fonts";
-@import "_typography";
-@import "_header";
-@import "_footer";
-@import "_calc";
+@import "utils";
+@import "fonts";
+@import "typography";
+@import "header";
+@import "footer";
+@import "calc";
 
 body {
   background: $c-gray;
