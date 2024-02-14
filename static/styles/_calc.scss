@@ -1,0 +1,56 @@
+.number-input-container {
+  margin-top: 30px;
+}
+
+.number-input-container label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-family: $open-sans;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.number-input-container input {
+  padding: 8px;
+  font-family: $open-sans;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.number-input-container button {
+  background-color: $background-color;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: $open-sans;
+  font-weight: 600;
+}
+
+.result-container {
+  text-align: left;
+}
+
+.result-text {
+  font-size: 24px;
+  color: #333;
+}
+
+#resultValue {
+  font-weight: $open-sans;
+  color: #e44d26;
+}
+
+.number-input-container button:hover {
+  background-color: $background-color;
+}
+
+.number-input-container #resultContainer {
+  font-family: $open-sans;
+  font-weight: 600;
+  margin-top: 10px;
+  font-size: 18px;
+  color: #333;
+}

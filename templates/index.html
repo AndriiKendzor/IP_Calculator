@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/styles_css/main.css">
+  </head>
+  <body class="page">
+    <script type="text/javascript" src="scripts/main.js"></script>
+    <header class="header" id="Home">
+      <div class="header__top">
+        <h1>{{ data.message }}</h1> <!-- ПРИКЛАД  -->
+        <div class="logo">
+          <a href = "#" class="header__top--logo">
+            <img src="../static/images/IpCalculator.png" alt="Air Logo" width="90" height="90" style="border-radius: 20%; margin-top: -20px;">
+          </a>
+          <a href="#menu" class="icon" ></a>
+        </div>
+        <nav class="nav">
+
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a class="nav__link" href="#WhoWeAre">Home</a>
+            </li>
+            <li class="nav__item">
+              <a class="nav__link" href="#SERVICES">Ip_Calculator</a>
+            </li>
+
+            <li class="nav__item">
+              <a class="nav__link" href="#Contacts">Other</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main class="main">
+      <section class="who-we-are" id="WhoWeAre">
+        <h2 class="who-we-are__title">Who we are</h2>
+        <div class="who-we-are__container">
+          <p class="who-we-are__desc">We embrace a strategic approach to creative ideas. We are interested in people and human relationships. This is the main thing you need to know about us. We believe in the power of bold ideas that can solve business challenges.</p>
+        </div>
+      </section>
+      <section class="calculator" id="Ip_Calculator">
+        <img src="../static/images/прозраный фонн black words.png" width="540" height="130" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
+        <h2 class="who-we-are">Choose your IP class</h2>
+        <td>
+  <label for="cclass1" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass1" value="a" onclick="popSubnet('a');">
+    <span class="rbmark"></span>A
+  </label> &nbsp;
+  <label for="cclass2" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass2" value="b" onclick="popSubnet('b');">
+    <span class="rbmark"></span>B
+  </label> &nbsp;
+  <label for="cclass3" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass3" value="c" onclick="popSubnet('c');">
+    <span class="rbmark"></span>C
+  </label>
+</td>
+
+<div class="number-input-container">
+  <label for="numberInput">Enter an IP address:</label>
+  <input type="text" id="numberInput" placeholder="For example: 192.168.0.0">
+  <button onclick="processNumber()">Process</button>
+  <div id="resultContainer"></div>
+</div>
+
+<script>
+document.getElementById('numberInput').addEventListener('input', function() {
+  var ip = this.value.trim();
+  var firstOctet = parseInt(ip.split('.')[0]);
+
+  var classA = document.getElementById('cclass1');
+  var classB = document.getElementById('cclass2');
+  var classC = document.getElementById('cclass3');
+
+  if (firstOctet >= 1 && firstOctet <= 127) {
+    classA.checked = true;
+  } else if (firstOctet >= 128 && firstOctet <= 191) {
+    classB.checked = true;
+  } else if (firstOctet >= 192 && firstOctet <= 223) {
+    classC.checked = true;
+  }
+});
+</script>
+        </div>
+        <div class="result-container">
+          <p class="result-text">The result is: <span id="resultValue"></span></p>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="footer__links">
+        <a href = "#" class="foooter--logo">
+          <img src="../static/images/IpCalculator.png" alt="Air Logo" width="80" height="80" style="border-radius: 20%;margin-top: -15px; ">
+        </a>
+
+        <nav class="nav">
+          <ul class="footer-nav__list">
+            <li class="footer-nav__item ">
+              <a class="footer-nav__link" href="/">Home</a>
+            </li>
+            <li class="footer-nav__item ">
+              <a class="footer-nav__link" href="#OWNERS">List of Owners</a>
+            </li>
+            <li class="footer-nav__item ">
+              <a class="footer-nav__link" href="/Privacy_Policy">Privacy Policy</a>
+            </li>
+            <li class="footer-nav__item ">
+              <a class="footer-nav__link" href="#Contacts">Contacts us</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+    </footer>
+  </body>
+</html>

@@ -1,9 +1,22 @@
-from flask import Flask
+from flask import Flask, render_template
 import re
 import math
 
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    data = {'message': ''}
+    return render_template('index.html', data=data)
 
 
+@app.route('/Privacy_Policy')
+def Privacy_Policy():
+    data = {'message': ''}
+    return render_template('Privacy_Policy.html', data=data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 '''
 #Перевірка IP на цифри і точки
 def validate_ip_address(ip):
