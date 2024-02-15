@@ -4,18 +4,15 @@ import math
 
 app = Flask(__name__)
 
-<<<<<<< HEAD
 @app.route('/')
 def index():
     data = {'message': ''}
     return render_template('index.html', data=data)
-=======
+
 
 app.route('/')
 def index():
     return render_template("index.html")
-
->>>>>>> 3d14400b449fd2fffe377eb53f34a3c740702202
 
 
 @app.route('/Privacy_Policy')
