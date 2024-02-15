@@ -164,7 +164,7 @@ def find_B(ip, pow2):
         cR = last_number_ip - 1
 
     #Вывожу в консоль все подсети + последний ОТДЕЛЬНО с эмодзи
-        if last_number_ip >= 255 and thrid_number_ip >= 255:
+        if bN_last >= 255 and cR >= 255:
             if not last_subnet_printed:
                 result += f"❗ ost. {licznik_podsieci}p:\n"
                 #Maska
@@ -263,7 +263,7 @@ def find_A(ip, pow2):
         cR = last_number_ip - 1
 
     #Вывожу в консоль все подсети + последний ОТДЕЛЬНО с эмодзи
-        if last_number_ip >= 255 and thrid_number_ip >= 255 and second_number_ip >= 255:
+        if aN_last >= 255 and bN_last >= 255 and cR >= 255:
             if not last_subnet_printed:
                 result +=f"❗ ost. {licznik_podsieci}p:\n"
                 #Maska
