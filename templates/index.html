@@ -4,16 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Title</title>
+
     <link rel="stylesheet" href="../static/styles_css/main.css">
+    <link rel="stylesheet" href="./styles/main.scss">
+
   </head>
   <body class="page">
     <script type="text/javascript" src="scripts/main.js"></script>
-    <header class="header" id="Home">
+        <header class="header" id="Home">
       <div class="header__top">
-        <h1>{{ data.message }}</h1> <!-- ПРИКЛАД  -->
         <div class="logo">
           <a href = "#" class="header__top--logo">
-            <img src="../static/images/Air.svg" alt="Air Logo">
+            <img src="../static/images/IpCalculator.png" alt="Air Logo" width="80" height="80" style="border-radius: 20%;margin-top: -15px; ">
           </a>
           <a href="#menu" class="icon" ></a>
         </div>
@@ -42,31 +44,124 @@
         </div>
       </section>
       <section class="calculator" id="Ip_Calculator">
-        <h2 class="who-we-are">Something</h2>
-        <div class="number-input-container">
-          <label for="numberInput">Enter a number:</label>
-          <input type="number" id="numberInput">
-          <button onclick="processNumber()">Process</button>
-          <div id="resultContainer"></div>
-        </div>
-        <div class="result-container">
-          <p class="result-text">The result is: <span id="resultValue"></span></p>
-        </div>
+        <img src="../static/images/прозраный фонн black words.png" width="540" height="130" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
+        <br><br><br>
+        <button id="hostsButton" type="button" class="btn btn-primary" style="border-radius: 12%;"><strong>Hosts</strong></button>
+        <button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Sub Networks</strong></button>
+
+        <script>
+        document.getElementById('hostsButton').addEventListener('click', function() {
+          this.style.backgroundColor = '#007bff'; // Изменяем цвет фона при нажатии на кнопку
+          this.style.borderColor = '#007bff'; // Изменяем цвет рамки при нажатии на кнопку
+          this.style.color = '#fff'; // Изменяем цвет текста при нажатии на кнопку
+
+          document.getElementById('subNetworksButton').style.backgroundColor = ''; // Сбрасываем цвет фона второй кнопки
+          document.getElementById('subNetworksButton').style.borderColor = ''; // Сбрасываем цвет рамки второй кнопки
+          document.getElementById('subNetworksButton').style.color = ''; // Сбрасываем цвет текста второй кнопки
+        });
+
+        document.getElementById('subNetworksButton').addEventListener('click', function() {
+          this.style.backgroundColor = '#007bff'; // Изменяем цвет фона при нажатии на кнопку
+          this.style.borderColor = '#007bff'; // Изменяем цвет рамки при нажатии на кнопку
+          this.style.color = '#fff'; // Изменяем цвет текста при нажатии на кнопку
+
+          document.getElementById('hostsButton').style.backgroundColor = ''; // Сбрасываем цвет фона первой кнопки
+          document.getElementById('hostsButton').style.borderColor = ''; // Сбрасываем цвет рамки первой кнопки
+          document.getElementById('hostsButton').style.color = ''; // Сбрасываем цвет текста первой кнопки
+        });
+        </script>
+
+        <h2 class="who-we-are">Choose your IP class</h2>
+        <td>
+  <label for="cclass1" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass1" value="a" onclick="popSubnet('a');">
+    <span class="rbmark"></span>A
+  </label> &nbsp;
+  <label for="cclass2" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass2" value="b" onclick="popSubnet('b');">
+    <span class="rbmark"></span>B
+  </label> &nbsp;
+  <label for="cclass3" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass3" value="c" onclick="popSubnet('c');">
+    <span class="rbmark"></span>C
+  </label>
+</td>
+
+<div class="number-input-container">
+  <form id="ipForm">
+    <label for="numberInput">Enter IP Address:</label>
+    <input type="text" id="numberInput" name="ipAddress" placeholder="For example: 192.168.0.0">
+
+    <!-- Update the size of the host input -->
+    <label for="hostInput">Enter Number of Hosts/Subnets:</label>
+    <input type="text" id="hostInput" name="hostCount" placeholder="For example: 50" style="width: 11%;">
+
+    <button type="button" onclick="processNumber()" style="width: 12%;">Process</button>
+    <label id="resultLabel"></label>
+  </form>
+</div>
+<script>
+document.getElementById('numberInput').addEventListener('input', function() {
+  var ip = this.value.trim();
+  var firstOctet = parseInt(ip.split('.')[0]);
+
+  var classA = document.getElementById('cclass1');
+  var classB = document.getElementById('cclass2');
+  var classC = document.getElementById('cclass3');
+
+  if (firstOctet >= 1 && firstOctet <= 127) {
+    classA.checked = true;
+  } else if (firstOctet >= 128 && firstOctet <= 191) {
+    classB.checked = true;
+  } else if (firstOctet >= 192 && firstOctet <= 223) {
+    classC.checked = true;
+  }
+});
+
+function processNumber() {
+  // Створіть об'єкт FormData і додайте в нього IP-адрес та кількість хостів
+  var formData = new FormData(document.getElementById('ipForm'));
+  formData.append('hostCount', document.getElementById('hostInput').value);
+
+  // Відправте POST-запит до сервера Flask із IP-адресою та кількістю хостів
+  fetch('/process_ip', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Оновіть лейбл з результатом на веб-сторінці
+    document.getElementById('resultLabel').innerText = 'Результат: \n' + data.result;
+  })
+  .catch(error => console.error('Помилка:', error));
+}
+</script>
       </section>
     </main>
     <footer class="footer">
       <div class="footer__links">
         <a href = "#" class="foooter--logo">
-          <img src="../static/images/Air.svg" alt="Air Logo">
+
+          <img src="../static/images/IpCalculator.png" alt="Air Logo" width="80" height="80" style="border-radius: 20%;margin-top: -15px; ">
+
+
         </a>
 
         <nav class="nav">
           <ul class="footer-nav__list">
             <li class="footer-nav__item ">
+
+              <a class="footer-nav__link" href="/">Home</a>
+
               <a class="footer-nav__link" href="#Home">Home</a>
+
             </li>
             <li class="footer-nav__item ">
               <a class="footer-nav__link" href="#OWNERS">List of Owners</a>
+            </li>
+            <li class="footer-nav__item ">
+
+              <a class="footer-nav__link" href="/Privacy_Policy">Privacy Policy</a>
             </li>
             <li class="footer-nav__item ">
               <a class="footer-nav__link" href="#Contacts">Contacts us</a>
@@ -77,6 +172,6 @@
 
     </footer>
   </body>
-</html>
 
+</html>
 
