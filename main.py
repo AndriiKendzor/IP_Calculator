@@ -12,7 +12,7 @@ def index():
 @app.route('/Contacts_Us')
 def Contacts_us():
     data = {'message': ''}
-    return render_template('contacts_us.html', data=data)
+    return render_template('contact_us.html', data=data)
 
 
 @app.route('/Privacy_Policy')
@@ -307,7 +307,6 @@ def find_A(ip, pow2):
 @app.route('/process_ip', methods=['POST'])
 def process_ip():
     data = request.form.to_dict()
-
     # Поверніть відповідь (опціонально)
     result = "________"
     # Приймаємо ip
@@ -318,6 +317,11 @@ def process_ip():
         host_count = int(data.get('hostCount'))
     except ValueError:
         result = ("Введене значення не є цілим числом.")
+
+
+
+
+
 
 
     #Степінь 2
@@ -335,11 +339,10 @@ def process_ip():
     ip_class = get_ip_class(ip_address)
 
 
-    '''
+
     # Подсеті (тест) -----------------------------------------
-    new_pow = 0
-    dec = int(input("1 - хости  2 - подсеті "))
-    if dec == 2:
+
+    if request.headers.get('X-Network-Button-Active') == 'true':
         if ip_class == 'C':
             new_pow = 8 - power_of_two
         elif ip_class == 'B':
@@ -354,7 +357,7 @@ def process_ip():
         power_of_two = new_pow
 
     # -------------------------------------------------------
-    '''
+
     #Вибір відповідної функції
     var_ip = validate_ip_address(ip_address)
     if var_ip == True:

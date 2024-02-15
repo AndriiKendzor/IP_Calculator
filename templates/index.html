@@ -50,25 +50,25 @@
 <button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Sub Networks</strong></button>
 
 <script>
-document.getElementById('hostsButton').addEventListener('click', function() {
-  this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
-  this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
-  this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
+    document.getElementById('hostsButton').addEventListener('click', function() {
+      this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
+      this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
+      this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
 
-  document.getElementById('subNetworksButton').style.backgroundColor = ''; // Сбрасываем цвет фона второй кнопки
-  document.getElementById('subNetworksButton').style.borderColor = ''; // Сбрасываем цвет рамки второй кнопки
-  document.getElementById('subNetworksButton').style.color = ''; // Сбрасываем цвет текста второй кнопки
-});
+      document.getElementById('subNetworksButton').style.backgroundColor = ''; // Сбрасываем цвет фона второй кнопки
+      document.getElementById('subNetworksButton').style.borderColor = ''; // Сбрасываем цвет рамки второй кнопки
+      document.getElementById('subNetworksButton').style.color = ''; // Сбрасываем цвет текста второй кнопки
+    });
 
-document.getElementById('subNetworksButton').addEventListener('click', function() {
-  this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
-  this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
-  this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
+    document.getElementById('subNetworksButton').addEventListener('click', function() {
+      this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
+      this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
+      this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
 
-  document.getElementById('hostsButton').style.backgroundColor = ''; // Сбрасываем цвет фона первой кнопки
-  document.getElementById('hostsButton').style.borderColor = ''; // Сбрасываем цвет рамки первой кнопки
-  document.getElementById('hostsButton').style.color = ''; // Сбрасываем цвет текста первой кнопки
-});
+      document.getElementById('hostsButton').style.backgroundColor = ''; // Сбрасываем цвет фона первой кнопки
+      document.getElementById('hostsButton').style.borderColor = ''; // Сбрасываем цвет рамки первой кнопки
+      document.getElementById('hostsButton').style.color = ''; // Сбрасываем цвет текста первой кнопки
+    });
 </script>
 
         <h2 class="who-we-are">Choose your IP class</h2>
@@ -101,6 +101,52 @@ document.getElementById('subNetworksButton').addEventListener('click', function(
   </form>
 </div>
 <script>
+document.getElementById('hostsButton').addEventListener('click', function() {
+  this.style.backgroundColor = '#343a40';
+  this.style.borderColor = '#343a40';
+  this.style.color = '#fff';
+
+  document.getElementById('subNetworksButton').style.backgroundColor = '';
+  document.getElementById('subNetworksButton').style.borderColor = '';
+  document.getElementById('subNetworksButton').style.color = '';
+});
+
+document.getElementById('subNetworksButton').addEventListener('click', function() {
+  this.style.backgroundColor = '#343a40';
+  this.style.borderColor = '#343a40';
+  this.style.color = '#fff';
+
+  document.getElementById('hostsButton').style.backgroundColor = '';
+  document.getElementById('hostsButton').style.borderColor = '';
+  document.getElementById('hostsButton').style.color = '';
+});
+
+function processNumber() {
+  var hostsButton = document.getElementById('hostsButton');
+  if (hostsButton.style.backgroundColor === 'rgb(52, 58, 64)') {
+    var formData = new FormData(document.getElementById('ipForm'));
+    formData.append('hostCount', document.getElementById('hostInput').value);
+
+    // Set custom header to indicate the state of the hostsButton
+    var headers = new Headers();
+    headers.append('X-Network-Button-Active', 'true');
+
+    fetch('/process_ip', {
+      method: 'POST',
+      body: formData,
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Результат: \n' + data.result;
+    })
+    .catch(error => console.error('Помилка:', error));
+  } else {
+    document.getElementById('resultLabel').innerText = 'Error';
+  }
+}
+
+
 document.getElementById('numberInput').addEventListener('input', function() {
   var ip = this.value.trim();
   var firstOctet = parseInt(ip.split('.')[0]);
@@ -116,30 +162,11 @@ document.getElementById('numberInput').addEventListener('input', function() {
   } else if (firstOctet >= 192 && firstOctet <= 223) {
     classC.checked = true;
   } else if (firstOctet >= 224) {
-    classA.checked = false; }
-    else if (firstOctet >= 224) {
-    classB.checked = false; }
-    else if (firstOctet >= 224) {
-    classC.checked = false; }
+    classA.checked = false;
+    classB.checked = false;
+    classC.checked = false;
+  }
 });
-
-function processNumber() {
-  // Створіть об'єкт FormData і додайте в нього IP-адрес та кількість хостів
-  var formData = new FormData(document.getElementById('ipForm'));
-  formData.append('hostCount', document.getElementById('hostInput').value);
-
-  // Відправте POST-запит до сервера Flask із IP-адресою та кількістю хостів
-  fetch('/process_ip', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Оновіть лейбл з результатом на веб-сторінці
-    document.getElementById('resultLabel').innerText = 'Результат: \n' + data.result;
-  })
-  .catch(error => console.error('Помилка:', error));
-}
 </script>
       </section>
     </main>
@@ -167,7 +194,7 @@ function processNumber() {
               <a class="footer-nav__link" href="/Privacy_Policy">Privacy Policy</a>
             </li>
             <li class="footer-nav__item ">
-              <a class="footer-nav__link" href="#Contacts">Contacts us</a>
+              <a class="footer-nav__link" href="/Contacts_Us">Contacts us</a>
             </li>
           </ul>
         </nav>
