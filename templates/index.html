@@ -46,10 +46,11 @@
       <section class="calculator" id="Ip_Calculator">
         <img src="../static/images/прозраный фонн black words.png" width="540" height="130" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
         <br><br><br>
-<button id="hostsButton" type="button" class="btn btn-primary" style="border-radius: 12%;"><strong>Hosts</strong></button>
-<button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Sub Networks</strong></button>
 
-<script>
+<button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Hosts</strong></button>
+<button id="hostsButton" type="button" class="btn btn-primary" style="border-radius: 12%;"><strong>Sub Networks</strong></button>
+
+        <script>
     document.getElementById('hostsButton').addEventListener('click', function() {
       this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
       this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
@@ -100,7 +101,9 @@
     <label id="resultLabel"></label>
   </form>
 </div>
+
 <script>
+
 document.getElementById('hostsButton').addEventListener('click', function() {
   this.style.backgroundColor = '#343a40';
   this.style.borderColor = '#343a40';
@@ -123,11 +126,13 @@ document.getElementById('subNetworksButton').addEventListener('click', function(
 
 function processNumber() {
   var hostsButton = document.getElementById('hostsButton');
+  var subNetworksButton = document.getElementById('subNetworksButton');
+
   if (hostsButton.style.backgroundColor === 'rgb(52, 58, 64)') {
     var formData = new FormData(document.getElementById('ipForm'));
     formData.append('hostCount', document.getElementById('hostInput').value);
 
-    // Set custom header to indicate the state of the hostsButton
+    // Установим заголовок 'X-Network-Button-Active' в 'true'
     var headers = new Headers();
     headers.append('X-Network-Button-Active', 'true');
 
@@ -140,9 +145,39 @@ function processNumber() {
     .then(data => {
       document.getElementById('resultLabel').innerText = 'Результат: \n' + data.result;
     })
-    .catch(error => console.error('Помилка:', error));
+    .catch(error => console.error('Ошибка:', error));
+  } else if (subNetworksButton.style.backgroundColor === 'rgb(52, 58, 64)') {
+    var formData = new FormData(document.getElementById('ipForm'));
+    formData.append('hostCount', document.getElementById('hostInput').value);
+
+    // Установим заголовок 'X-Network-Button-Active' в 'true'
+    var headers = new Headers();
+    headers.append('X-Networks-Button-Active', 'true');
+
+    fetch('/process_another_ip', { // Используем другой URL или другой метод
+      method: 'POST',
+      body: formData,
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Другой результат: \n' + data.result;
+    })
+    .catch(error => console.error('Ошибка:', error));
   } else {
-    document.getElementById('resultLabel').innerText = 'Error';
+    // Если ни одна из кнопок не активна, установим заголовок 'X-Network-Button-Active' в 'false'
+    var headers = new Headers();
+    headers.append('X-Network-Button-Active', 'false');
+
+    fetch('/process_ip', {
+      method: 'POST',
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Другой результат: \n' + data.result;
+    })
+    .catch(error => console.error('Ошибка:', error));
   }
 }
 

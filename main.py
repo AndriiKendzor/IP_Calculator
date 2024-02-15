@@ -303,9 +303,82 @@ def find_A(ip, pow2):
     return result
 
 
+@app.route('/process_another_ip', methods=['POST'])
+def process_ip():
+    data = request.form.to_dict()
+
+    ip_address = data.get('ipAddress')
+
+    # Приймаємо host
+    try:
+        host_count = int(data.get('hostCount'))
+    except ValueError:
+        result = ("Введене значення не є цілим числом.")
+
+
+
+
+
+    ip_class = get_ip_class(ip_address)
+
+    if request.headers.get('X-Networks-Button-Active') == 'true':
+        var = True  # варифікація
+        var = validate_host(host_count)
+        if var == True:
+            power_of_two = find_power_of_two(host_count)
+            print(f"Кількість хостів поміщається в 2^{power_of_two} = {2 ** power_of_two}")
+        else:
+            result = "Не вірна кількість хостів для даної ip класи"
+
+            # Вибір відповідної функції
+        var_ip = validate_ip_address(ip_address)
+        if var_ip == True:
+
+            if ip_class == 'C':
+                # Перевіряємо
+                var = validate_host_C(host_count)
+                # Обчислити класу С
+                if var == True:
+                    result = find_c(ip_address, 2 ** power_of_two)
+                else:
+                    result = "Не вірна кількість хостів для класи C"
+
+            elif ip_class == 'B':
+                # Перевіряємо
+                var = validate_host_B(host_count)
+                # Обчислити класу B
+                if var == True:
+                    result = find_B(ip_address, 2 ** power_of_two)
+                else:
+                    result = "Не вірна кількість хостів для класи C"
+
+            elif ip_class == 'A':
+                # Перевіпряємо
+                var = validate_host_A(host_count)
+                # Обчислити класу A
+                if var == True:
+                    result = find_A(ip_address, 2 ** power_of_two)
+                else:
+                    result = "Не вірна кількість хостів для класи C"
+
+            elif ip_class == 'D':
+                result = ("Даний IP належить до зарезервованої класи D")
+            elif ip_class == 'E':
+                result = ("Даний IP належить до зарезервованої класи E")
+            else:
+                result = ("Не валідний формат IP")
+        else:
+            result = "Введений не правельний IP  An invalid IP is entered"
+
+        return jsonify({'result': result})
+
+
+
+
+
 
 @app.route('/process_ip', methods=['POST'])
-def process_ip():
+def process_another_ip():
     data = request.form.to_dict()
     # Поверніть відповідь (опціонально)
     result = "________"
@@ -317,6 +390,9 @@ def process_ip():
         host_count = int(data.get('hostCount'))
     except ValueError:
         result = ("Введене значення не є цілим числом.")
+
+
+
 
 
 
@@ -354,7 +430,9 @@ def process_ip():
         if new_pow == 1 or new_pow == 0:
             new_pow = 2
 
+
         power_of_two = new_pow
+
 
     # -------------------------------------------------------
 
