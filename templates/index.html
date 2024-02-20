@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title</title>
-
+    <title>IpCalculator</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/IpCalculator.png">
     <link rel="stylesheet" href="../static/styles_css/main.css">
     <link rel="stylesheet" href="./styles/main.scss">
 
@@ -46,30 +46,31 @@
       <section class="calculator" id="Ip_Calculator">
         <img src="../static/images/прозраный фонн black words.png" width="540" height="130" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
         <br><br><br>
-        <button id="hostsButton" type="button" class="btn btn-primary" style="border-radius: 12%;"><strong>Hosts</strong></button>
-        <button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Sub Networks</strong></button>
+
+<button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Hosts</strong></button>
+<button id="hostsButton" type="button" class="btn btn-primary" style="border-radius: 12%;"><strong>Sub Networks</strong></button>
 
         <script>
-        document.getElementById('hostsButton').addEventListener('click', function() {
-          this.style.backgroundColor = '#007bff'; // Изменяем цвет фона при нажатии на кнопку
-          this.style.borderColor = '#007bff'; // Изменяем цвет рамки при нажатии на кнопку
-          this.style.color = '#fff'; // Изменяем цвет текста при нажатии на кнопку
+    document.getElementById('hostsButton').addEventListener('click', function() {
+      this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
+      this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
+      this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
 
-          document.getElementById('subNetworksButton').style.backgroundColor = ''; // Сбрасываем цвет фона второй кнопки
-          document.getElementById('subNetworksButton').style.borderColor = ''; // Сбрасываем цвет рамки второй кнопки
-          document.getElementById('subNetworksButton').style.color = ''; // Сбрасываем цвет текста второй кнопки
-        });
+      document.getElementById('subNetworksButton').style.backgroundColor = ''; // Сбрасываем цвет фона второй кнопки
+      document.getElementById('subNetworksButton').style.borderColor = ''; // Сбрасываем цвет рамки второй кнопки
+      document.getElementById('subNetworksButton').style.color = ''; // Сбрасываем цвет текста второй кнопки
+    });
 
-        document.getElementById('subNetworksButton').addEventListener('click', function() {
-          this.style.backgroundColor = '#007bff'; // Изменяем цвет фона при нажатии на кнопку
-          this.style.borderColor = '#007bff'; // Изменяем цвет рамки при нажатии на кнопку
-          this.style.color = '#fff'; // Изменяем цвет текста при нажатии на кнопку
+    document.getElementById('subNetworksButton').addEventListener('click', function() {
+      this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
+      this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
+      this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
 
-          document.getElementById('hostsButton').style.backgroundColor = ''; // Сбрасываем цвет фона первой кнопки
-          document.getElementById('hostsButton').style.borderColor = ''; // Сбрасываем цвет рамки первой кнопки
-          document.getElementById('hostsButton').style.color = ''; // Сбрасываем цвет текста первой кнопки
-        });
-        </script>
+      document.getElementById('hostsButton').style.backgroundColor = ''; // Сбрасываем цвет фона первой кнопки
+      document.getElementById('hostsButton').style.borderColor = ''; // Сбрасываем цвет рамки первой кнопки
+      document.getElementById('hostsButton').style.color = ''; // Сбрасываем цвет текста первой кнопки
+    });
+</script>
 
         <h2 class="who-we-are">Choose your IP class</h2>
         <td>
@@ -100,7 +101,94 @@
     <label id="resultLabel"></label>
   </form>
 </div>
+
 <script>
+  function setDefaultButton() {
+    document.getElementById('subNetworksButton').click();
+  }
+
+  // Call the function when the page is loaded
+  window.addEventListener('load', setDefaultButton);
+
+
+document.getElementById('hostsButton').addEventListener('click', function() {
+  this.style.backgroundColor = '#343a40';
+  this.style.borderColor = '#343a40';
+  this.style.color = '#fff';
+
+  document.getElementById('subNetworksButton').style.backgroundColor = '';
+  document.getElementById('subNetworksButton').style.borderColor = '';
+  document.getElementById('subNetworksButton').style.color = '';
+});
+
+document.getElementById('subNetworksButton').addEventListener('click', function() {
+  this.style.backgroundColor = '#343a40';
+  this.style.borderColor = '#343a40';
+  this.style.color = '#fff';
+
+  document.getElementById('hostsButton').style.backgroundColor = '';
+  document.getElementById('hostsButton').style.borderColor = '';
+  document.getElementById('hostsButton').style.color = '';
+});
+
+function processNumber() {
+  var hostsButton = document.getElementById('hostsButton');
+  var subNetworksButton = document.getElementById('subNetworksButton');
+
+  if (hostsButton.style.backgroundColor === 'rgb(52, 58, 64)') {
+    var formData = new FormData(document.getElementById('ipForm'));
+    formData.append('hostCount', document.getElementById('hostInput').value);
+
+    // Установим заголовок 'X-Network-Button-Active' в 'true'
+    var headers = new Headers();
+    headers.append('X-Network-Button-Active', 'true');
+
+    fetch('/process_ip', {
+      method: 'POST',
+      body: formData,
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
+    })
+    .catch(error => console.error('Error:', error));
+  } else if (subNetworksButton.style.backgroundColor === 'rgb(52, 58, 64)') {
+    var formData = new FormData(document.getElementById('ipForm'));
+    formData.append('hostCount', document.getElementById('hostInput').value);
+
+    // Установим заголовок 'X-Network-Button-Active' в 'true'
+    var headers = new Headers();
+    headers.append('X-Networks-Button-Active', 'true');
+
+    fetch('/process_another_ip', { // Используем другой URL или другой метод
+      method: 'POST',
+      body: formData,
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
+    })
+    .catch(error => console.error('Error:', error));
+  } else {
+    // Если ни одна из кнопок не активна, установим заголовок 'X-Network-Button-Active' в 'false'
+    var headers = new Headers();
+    headers.append('X-Network-Button-Active', 'false');
+
+    fetch('/process_ip', {
+      method: 'POST',
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
+    })
+    .catch(error => console.error('Error:', error));
+  }
+}
+
+
 document.getElementById('numberInput').addEventListener('input', function() {
   var ip = this.value.trim();
   var firstOctet = parseInt(ip.split('.')[0]);
@@ -115,26 +203,12 @@ document.getElementById('numberInput').addEventListener('input', function() {
     classB.checked = true;
   } else if (firstOctet >= 192 && firstOctet <= 223) {
     classC.checked = true;
+  } else if (firstOctet >= 224) {
+    classA.checked = false;
+    classB.checked = false;
+    classC.checked = false;
   }
 });
-
-function processNumber() {
-  // Створіть об'єкт FormData і додайте в нього IP-адрес та кількість хостів
-  var formData = new FormData(document.getElementById('ipForm'));
-  formData.append('hostCount', document.getElementById('hostInput').value);
-
-  // Відправте POST-запит до сервера Flask із IP-адресою та кількістю хостів
-  fetch('/process_ip', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Оновіть лейбл з результатом на веб-сторінці
-    document.getElementById('resultLabel').innerText = 'Результат: \n' + data.result;
-  })
-  .catch(error => console.error('Помилка:', error));
-}
 </script>
       </section>
     </main>
@@ -151,9 +225,7 @@ function processNumber() {
           <ul class="footer-nav__list">
             <li class="footer-nav__item ">
 
-              <a class="footer-nav__link" href="/">Home</a>
-
-              <a class="footer-nav__link" href="#Home">Home</a>
+              <a class="footer-nav__link" href="/" style="margin-left: 70px;">Home</a>
 
             </li>
             <li class="footer-nav__item ">
@@ -164,7 +236,7 @@ function processNumber() {
               <a class="footer-nav__link" href="/Privacy_Policy">Privacy Policy</a>
             </li>
             <li class="footer-nav__item ">
-              <a class="footer-nav__link" href="#Contacts">Contacts us</a>
+              <a class="footer-nav__link" href="/Contacts_Us">Contacts us</a>
             </li>
           </ul>
         </nav>

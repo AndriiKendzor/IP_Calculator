@@ -9,9 +9,11 @@ def index():
     data = {'message': ''}
     return render_template('index.html', data=data)
 
-app.route('/')
-def index():
-    return render_template("index.html")
+@app.route('/Contacts_Us')
+def Contacts_us():
+    data = {'message': ''}
+    return render_template('contact_us.html', data=data)
+
 
 @app.route('/Privacy_Policy')
 def Privacy_Policy():
@@ -48,7 +50,7 @@ def get_ip_class(ip):
 #Перевірка хоста класи C
 def validate_host(host_count):
     if host_count <= 0:
-        print("Не вірна кількість хостів")
+        print("Incorrect number of hosts")
         return False
     else:
         return True
@@ -59,13 +61,13 @@ def find_power_of_two(host_count):
         power = math.ceil(math.log2(host_count + 2)) #Добовляем 2 на Network i Rozgłoszeniowy
         return power
     else:
-        return "Введене число має бути більше 0."
+        return "The entered number must be greater than 0."
 
 
 #Перевірка хоста класи C
 def validate_host_C(host_count):
     if host_count > 254:
-        print("Не вірна кількість хостів для ip класи C")
+        print("Invalid number of hosts for ip class C")
         return False
     else:
         return True
@@ -102,7 +104,7 @@ def find_c(ip, pow2):
                 #Maska
                 maska_koncowa = f"{N}"
             result +=f"ost. N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R: {first_three_octets}.{R};\n"
-            result +=f"🎭 Маска - 255.255.255.{maska_koncowa}\n"
+            result +=f"🎭 Mask - 255.255.255.{maska_koncowa}\n"
         elif licznik_podsieci == 1 or licznik_podsieci == 2 or licznik_podsieci == 3:
             result +=f"{licznik_podsieci}p:\n"
             result +=f"N: {first_three_octets}.{N}; 1H: {first_three_octets}.{H1}; ostH: {first_three_octets}.{H_ost}; R: {first_three_octets}.{R};\n"
@@ -114,7 +116,7 @@ def find_c(ip, pow2):
 #Перевірка хоста класи B
 def validate_host_B(host_count):
     if host_count > 65534:
-        print("Не вірна кількість хостів для ip класи B")
+        print("Invalid number of hosts for ip class B")
         return False
     else:
         return True
@@ -171,7 +173,7 @@ def find_B(ip, pow2):
                 maska_koncowa = f"{bN_first}.{cN}"
                 last_subnet_printed = True
             result += f"N: {first_two_octets}.{bN_first}.{cN}; 1H: {first_two_octets}.{bN_first}.{cH1}; ostH: {first_two_octets}.{bN_last}.{cH_ost}; R: {first_two_octets}.{bN_last}.{cR};\n"
-            result +=f"🎭 Маска - 255.255.{maska_koncowa}\n"
+            result +=f"🎭 Mask - 255.255.{maska_koncowa}\n"
 
 
         elif licznik_podsieci == 1 or licznik_podsieci == 2 or licznik_podsieci == 3:
@@ -195,7 +197,7 @@ def find_B(ip, pow2):
 #Перевірка хоста класи A
 def validate_host_A(host_count):
     if host_count > 16777214:
-        print("Не вірна кількість хостів для ip класи A")
+        print("Invalid number of hosts for ip class A")
         return False
     else:
         return True
@@ -271,7 +273,7 @@ def find_A(ip, pow2):
                 last_subnet_printed = True
 
             result +=f"N: {first_octet}.{aN_first}.{bN_first}.{cN}; 1H: {first_octet}.{aN_first}.{bN_first}.{cH1}; ostH: {first_octet}.{aN_last}.{bN_last}.{cH_ost}; R: {first_octet}.{aN_last}.{bN_last}.{cR};\n"
-            result +=f"🎭 Маска - 255.{maska_koncowa}\n"
+            result +=f"🎭 Mask - 255.{maska_koncowa}\n"
 
 
         elif licznik_podsieci == 1 or licznik_podsieci == 2 or licznik_podsieci == 3:
@@ -301,13 +303,82 @@ def find_A(ip, pow2):
     return result
 
 
-
-@app.route('/process_ip', methods=['POST'])
+@app.route('/process_another_ip', methods=['POST'])
 def process_ip():
     data = request.form.to_dict()
 
+    ip_address = data.get('ipAddress')
+
+    # Приймаємо host
+    try:
+        host_count = int(data.get('hostCount'))
+    except ValueError:
+        result = ("The entered value is not an integer.")
+
+
+    ip_class = get_ip_class(ip_address)
+
+    if request.headers.get('X-Networks-Button-Active') == 'true':
+        var = True  # варифікація
+        var = validate_host(host_count)
+        if var == True:
+            power_of_two = find_power_of_two(host_count)
+            print(f"Кількість хостів поміщається в 2^{power_of_two} = {2 ** power_of_two}")
+        else:
+            result = "Invalid number of hosts for this ip class"
+
+            # Вибір відповідної функції
+        var_ip = validate_ip_address(ip_address)
+        if var_ip == True:
+
+            if ip_class == 'C':
+                # Перевіряємо
+                var = validate_host_C(host_count)
+                # Обчислити класу С
+                if var == True:
+                    result = find_c(ip_address, 2 ** power_of_two)
+                else:
+                    result = "Incorrect number of hosts for class C"
+
+            elif ip_class == 'B':
+                # Перевіряємо
+                var = validate_host_B(host_count)
+                # Обчислити класу B
+                if var == True:
+                    result = find_B(ip_address, 2 ** power_of_two)
+                else:
+                    result = "Incorrect number of hosts for class B"
+
+            elif ip_class == 'A':
+                # Перевіпряємо
+                var = validate_host_A(host_count)
+                # Обчислити класу A
+                if var == True:
+                    result = find_A(ip_address, 2 ** power_of_two)
+                else:
+                    result = "Incorrect number of hosts for class A"
+
+            elif ip_class == 'D':
+                result = ("This IP belongs to the reserved class D")
+            elif ip_class == 'E':
+                result = ("This IP belongs to the reserved class E")
+            else:
+                result = ("IP  An invalid IP is entered")
+        else:
+            result = "IP  An invalid IP is entered"
+
+        return jsonify({'result': result})
+
+
+
+
+
+
+@app.route('/process_ip', methods=['POST'])
+def process_another_ip():
+    data = request.form.to_dict()
     # Поверніть відповідь (опціонально)
-    result = "________";
+    result = "________"
     # Приймаємо ip
     ip_address = data.get('ipAddress')
 
@@ -315,7 +386,7 @@ def process_ip():
     try:
         host_count = int(data.get('hostCount'))
     except ValueError:
-        result = ("Введене значення не є цілим числом.")
+        result = ("The entered value is not an integer.")
 
 
     #Степінь 2
@@ -324,7 +395,7 @@ def process_ip():
     if var == True:
         power_of_two = find_power_of_two(host_count)
     else:
-        result = "Не вірна кількість хостів для даної ip класи"
+        result = "Invalid number of hosts for this ip class"
 
     print(f"Кількість хостів поміщається в 2^{power_of_two} = {2**power_of_two}")
 
@@ -332,12 +403,9 @@ def process_ip():
     #Перевірка ip та вибір класи
     ip_class = get_ip_class(ip_address)
 
-
-    '''
     # Подсеті (тест) -----------------------------------------
-    new_pow = 0
-    dec = int(input("1 - хости  2 - подсеті "))
-    if dec == 2:
+
+    if request.headers.get('X-Network-Button-Active') == 'true':
         if ip_class == 'C':
             new_pow = 8 - power_of_two
         elif ip_class == 'B':
@@ -348,11 +416,10 @@ def process_ip():
         #знайшов баг коли new_pow = 1 або 0 то програма не коректно працює
         if new_pow == 1 or new_pow == 0:
             new_pow = 2
-
         power_of_two = new_pow
 
     # -------------------------------------------------------
-    '''
+
     #Вибір відповідної функції
     var_ip = validate_ip_address(ip_address)
     if var_ip == True:
@@ -364,7 +431,7 @@ def process_ip():
             if var == True:
                 result = find_c(ip_address, 2**power_of_two)
             else:
-                result = "Не вірна кількість хостів для класи C"
+                result = "Incorrect number of hosts for class C"
 
         elif ip_class == 'B':
             # Перевіряємо
@@ -373,7 +440,7 @@ def process_ip():
             if var == True:
                 result = find_B(ip_address, 2 ** power_of_two)
             else:
-                result = "Не вірна кількість хостів для класи C"
+                result = "Incorrect number of hosts for class B"
 
         elif ip_class == 'A':
             #Перевіпряємо
@@ -382,16 +449,16 @@ def process_ip():
             if var == True:
                 result = find_A(ip_address, 2 ** power_of_two)
             else:
-                result = "Не вірна кількість хостів для класи C"
+                result = "Incorrect number of hosts for class A"
 
         elif ip_class == 'D':
-            result = ("Даний IP належить до зарезервованої класи D")
+            result = ("This IP belongs to the reserved class D")
         elif ip_class == 'E':
-            result = ("Даний IP належить до зарезервованої класи E")
+            result = ("This IP belongs to the reserved class E")
         else:
-            result = ("Не валідний формат IP")
+            result = ("An invalid IP is entered")
     else:
-        result = "Введений не правельний IP"
+        result = "An invalid IP is entered"
 
 
 
