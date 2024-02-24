@@ -40,11 +40,12 @@
       <section class="who-we-are" id="WhoWeAre">
         <h2 class="who-we-are__title">Who we are</h2>
         <div class="who-we-are__container">
-          <p class="who-we-are__desc">We embrace a strategic approach to creative ideas. We are interested in people and human relationships. This is the main thing you need to know about us. We believe in the power of bold ideas that can solve business challenges.</p>
+          <p class="who-we-are__desc">We embrace a strategic approach to creative ideas. We are interested in people and human relationships.
+            This is the main thing you need to know about us. We believe in the power of bold ideas that can solve business challenges.         <br> <sub>2024</sub></p>
         </div>
       </section>
       <section class="calculator" id="Ip_Calculator">
-        <img src="../static/images/прозраный фонн black words.png" width="540" height="130" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
+        <img src="../static/images/IpClass.png" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
         <br><br><br>
 
 <button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Hosts</strong></button>
@@ -99,10 +100,18 @@
 
     <button type="button" onclick="processNumber()" style="width: 12%;">Process</button>
     <label id="resultLabel"></label>
+
   </form>
 </div>
 
 <script>
+  function setDefaultButton() {
+    document.getElementById('subNetworksButton').click();
+  }
+
+  // Call the function when the page is loaded
+  window.addEventListener('load', setDefaultButton);
+
 
 document.getElementById('hostsButton').addEventListener('click', function() {
   this.style.backgroundColor = '#343a40';
@@ -143,9 +152,9 @@ function processNumber() {
     })
     .then(response => response.json())
     .then(data => {
-      document.getElementById('resultLabel').innerText = 'Результат: \n' + data.result;
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
     })
-    .catch(error => console.error('Ошибка:', error));
+    .catch(error => console.error('Error:', error));
   } else if (subNetworksButton.style.backgroundColor === 'rgb(52, 58, 64)') {
     var formData = new FormData(document.getElementById('ipForm'));
     formData.append('hostCount', document.getElementById('hostInput').value);
@@ -161,9 +170,9 @@ function processNumber() {
     })
     .then(response => response.json())
     .then(data => {
-      document.getElementById('resultLabel').innerText = 'Другой результат: \n' + data.result;
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
     })
-    .catch(error => console.error('Ошибка:', error));
+    .catch(error => console.error('Error:', error));
   } else {
     // Если ни одна из кнопок не активна, установим заголовок 'X-Network-Button-Active' в 'false'
     var headers = new Headers();
@@ -175,9 +184,9 @@ function processNumber() {
     })
     .then(response => response.json())
     .then(data => {
-      document.getElementById('resultLabel').innerText = 'Другой результат: \n' + data.result;
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
     })
-    .catch(error => console.error('Ошибка:', error));
+    .catch(error => console.error('Error:', error));
   }
 }
 
