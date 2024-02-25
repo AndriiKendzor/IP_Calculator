@@ -343,7 +343,7 @@ def process_ip():
                 if var == True:
                     result = find_c(ip_address, 2 ** power_of_two)
                 else:
-                    result = "Incorrect number of hosts for class C"
+                    result = "Incorrect number of Hosts/Subnets for class C"
 
             elif ip_class == 'B':
                 # Перевіряємо
@@ -352,7 +352,7 @@ def process_ip():
                 if var == True:
                     result = find_B(ip_address, 2 ** power_of_two)
                 else:
-                    result = "Incorrect number of hosts for class B"
+                    result = "Incorrect number of Hosts/Subnets for class B"
 
             elif ip_class == 'A':
                 # Перевіпряємо
@@ -361,7 +361,7 @@ def process_ip():
                 if var == True:
                     result = find_A(ip_address, 2 ** power_of_two)
                 else:
-                    result = "Incorrect number of hosts for class A"
+                    result = "Incorrect number of Hosts/Subnets for class A"
 
             elif ip_class == 'D':
                 result = ("This IP belongs to the reserved class D")
@@ -386,6 +386,14 @@ def process_another_ip():
     result = "________"
     # Приймаємо ip
     ip_address = data.get('ipAddress')
+    # Проверяем, содержит ли IP-адрес буквы
+    if re.search('[a-zA-Z]', ip_address):
+        return "Ошибка: IP-адрес не должен содержать буквы"
+    else:
+        # Если IP-адрес не содержит букв, выполняем остальные действия
+        print("IP-адрес не содержит букв:", ip_address)
+
+
 
     # Приймаємо host
     try:

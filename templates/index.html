@@ -96,7 +96,7 @@
 
     <!-- Update the size of the host input -->
     <label for="hostInput">Enter Number of Hosts/Subnets:</label>
-    <input type="text" id="hostInput" name="hostCount" placeholder="For example: 50" style="width: 11%;">
+    <input type="number" id="hostInput" name="hostCount" placeholder="For example: 50" min="0" style="width: 26%;" pattern="[0-9]*">
 
     <button type="button" onclick="processNumber()" style="width: 12%;">Process</button>
     <label id="resultLabel"></label>
