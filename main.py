@@ -14,6 +14,12 @@ def index():
     data = {'message': ''}
     return render_template('index.html', data=data)
 
+
+@app.route('/WhoWeAre')
+def who_we_are():
+    data = {'message': ''}
+    return render_template('WhoWeAre.html', data=data)
+
 @app.route('/Contacts_Us')
 def Contacts_us():
     data = {'message': ''}
