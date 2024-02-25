@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IpCalculator</title>
+    <link rel="icon" type="image/x-icon" href="../static/images/IpCalculator.png">
+    <link rel="stylesheet" href="../static/styles_css/main.css">
+    <link rel="stylesheet" href="./styles/main.scss">
+
+  </head>
+  <body class="page">
+    <script type="text/javascript" src="scripts/main.js"></script>
+        <header class="header" id="Home">
+      <div class="header__top">
+        <div class="logo">
+          <a href = "#" class="header__top--logo">
+            <img src="../static/images/IpCalculator.png" alt="Air Logo" width="80" height="80" style="border-radius: 20%;margin-top: -15px; ">
+          </a>
+          <a href="#menu" class="icon" ></a>
+        </div>
+        <nav class="nav">
+
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a class="nav__link" href="#WhoWeAre">Home</a>
+            </li>
+            <li class="nav__item">
+              <a class="nav__link" href="#SERVICES">Ip_Calculator</a>
+            </li>
+
+            <li class="nav__item">
+              <a class="nav__link" href="#Contacts">Other</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main class="main">
+      <section class="who-we-are" id="WhoWeAre">
+        <h2 class="who-we-are__title">Who we are</h2>
+        <div class="who-we-are__container">
+          <p class="who-we-are__desc">We embrace a strategic approach to creative ideas. We are interested in people and human relationships.
+            This is the main thing you need to know about us. We believe in the power of bold ideas that can solve business challenges.         <br> <sub>2024</sub></p>
+        </div>
+      </section>
+      <section class="calculator" id="Ip_Calculator">
+        <img src="../static/images/IpClass.png" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
+        <br><br><br>
+
+<button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Hosts</strong></button>
+<button id="hostsButton" type="button" class="btn btn-primary" style="border-radius: 12%;"><strong>Sub Networks</strong></button>
+
+        <script>
+    document.getElementById('hostsButton').addEventListener('click', function() {
+      this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
+      this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
+      this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
+
+      document.getElementById('subNetworksButton').style.backgroundColor = ''; // Сбрасываем цвет фона второй кнопки
+      document.getElementById('subNetworksButton').style.borderColor = ''; // Сбрасываем цвет рамки второй кнопки
+      document.getElementById('subNetworksButton').style.color = ''; // Сбрасываем цвет текста второй кнопки
+    });
+
+    document.getElementById('subNetworksButton').addEventListener('click', function() {
+      this.style.backgroundColor = '#343a40'; // Темно-серый цвет фона при нажатии на кнопку
+      this.style.borderColor = '#343a40'; // Темно-серый цвет рамки при нажатии на кнопку
+      this.style.color = '#fff'; // Белый цвет текста при нажатии на кнопку
+
+      document.getElementById('hostsButton').style.backgroundColor = ''; // Сбрасываем цвет фона первой кнопки
+      document.getElementById('hostsButton').style.borderColor = ''; // Сбрасываем цвет рамки первой кнопки
+      document.getElementById('hostsButton').style.color = ''; // Сбрасываем цвет текста первой кнопки
+    });
+</script>
+
+        <h2 class="who-we-are">Choose your IP class</h2>
+        <td>
+  <label for="cclass1" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass1" value="a" onclick="popSubnet('a');">
+    <span class="rbmark"></span>A
+  </label> &nbsp;
+  <label for="cclass2" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass2" value="b" onclick="popSubnet('b');">
+    <span class="rbmark"></span>B
+  </label> &nbsp;
+  <label for="cclass3" class="cbcontainer">
+    <input type="radio" name="cclass" id="cclass3" value="c" onclick="popSubnet('c');">
+    <span class="rbmark"></span>C
+  </label>
+</td>
+
+<div class="number-input-container">
+  <form id="ipForm">
+    <label for="numberInput">Enter IP Address:</label>
+    <input type="text" id="numberInput" name="ipAddress" placeholder="For example: 192.168.0.0">
+
+    <!-- Update the size of the host input -->
+    <label for="hostInput">Enter Number of Hosts/Subnets:</label>
+    <input type="text" id="hostInput" name="hostCount" placeholder="For example: 50" style="width: 11%;">
+
+    <button type="button" onclick="processNumber()" style="width: 12%;">Process</button>
+    <label id="resultLabel"></label>
+
+  </form>
+</div>
+
+<script>
+  function setDefaultButton() {
+    document.getElementById('subNetworksButton').click();
+  }
+
+  // Call the function when the page is loaded
+  window.addEventListener('load', setDefaultButton);
+
+
+document.getElementById('hostsButton').addEventListener('click', function() {
+  this.style.backgroundColor = '#343a40';
+  this.style.borderColor = '#343a40';
+  this.style.color = '#fff';
+
+  document.getElementById('subNetworksButton').style.backgroundColor = '';
+  document.getElementById('subNetworksButton').style.borderColor = '';
+  document.getElementById('subNetworksButton').style.color = '';
+});
+
+document.getElementById('subNetworksButton').addEventListener('click', function() {
+  this.style.backgroundColor = '#343a40';
+  this.style.borderColor = '#343a40';
+  this.style.color = '#fff';
+
+  document.getElementById('hostsButton').style.backgroundColor = '';
+  document.getElementById('hostsButton').style.borderColor = '';
+  document.getElementById('hostsButton').style.color = '';
+});
+
+function processNumber() {
+  var hostsButton = document.getElementById('hostsButton');
+  var subNetworksButton = document.getElementById('subNetworksButton');
+
+  if (hostsButton.style.backgroundColor === 'rgb(52, 58, 64)') {
+    var formData = new FormData(document.getElementById('ipForm'));
+    formData.append('hostCount', document.getElementById('hostInput').value);
+
+    // Установим заголовок 'X-Network-Button-Active' в 'true'
+    var headers = new Headers();
+    headers.append('X-Network-Button-Active', 'true');
+
+    fetch('/process_ip', {
+      method: 'POST',
+      body: formData,
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
+    })
+    .catch(error => console.error('Error:', error));
+  } else if (subNetworksButton.style.backgroundColor === 'rgb(52, 58, 64)') {
+    var formData = new FormData(document.getElementById('ipForm'));
+    formData.append('hostCount', document.getElementById('hostInput').value);
+
+    // Установим заголовок 'X-Network-Button-Active' в 'true'
+    var headers = new Headers();
+    headers.append('X-Networks-Button-Active', 'true');
+
+    fetch('/process_another_ip', { // Используем другой URL или другой метод
+      method: 'POST',
+      body: formData,
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
+    })
+    .catch(error => console.error('Error:', error));
+  } else {
+    // Если ни одна из кнопок не активна, установим заголовок 'X-Network-Button-Active' в 'false'
+    var headers = new Headers();
+    headers.append('X-Network-Button-Active', 'false');
+
+    fetch('/process_ip', {
+      method: 'POST',
+      headers: headers
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('resultLabel').innerText = 'Result: \n' + data.result;
+    })
+    .catch(error => console.error('Error:', error));
+  }
+}
+
+
+document.getElementById('numberInput').addEventListener('input', function() {
+  var ip = this.value.trim();
+  var firstOctet = parseInt(ip.split('.')[0]);
+
+  var classA = document.getElementById('cclass1');
+  var classB = document.getElementById('cclass2');
+  var classC = document.getElementById('cclass3');
+
+  if (firstOctet >= 1 && firstOctet <= 127) {
+    classA.checked = true;
+  } else if (firstOctet >= 128 && firstOctet <= 191) {
+    classB.checked = true;
+  } else if (firstOctet >= 192 && firstOctet <= 223) {
+    classC.checked = true;
+  } else if (firstOctet >= 224) {
+    classA.checked = false;
+    classB.checked = false;
+    classC.checked = false;
+  }
+});
+</script>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="footer__links">
+        <a href = "#" class="foooter--logo">
+
+          <img src="../static/images/IpCalculator.png" alt="Air Logo" width="80" height="80" style="border-radius: 20%;margin-top: -15px; ">
+
+
+        </a>
+
+        <nav class="nav">
+          <ul class="footer-nav__list">
+            <li class="footer-nav__item ">
+
+              <a class="footer-nav__link" href="/" style="margin-left: 70px;">Home</a>
+
+            </li>
+            <li class="footer-nav__item ">
+              <a class="footer-nav__link" href="#OWNERS">List of Owners</a>
+            </li>
+            <li class="footer-nav__item ">
+
+              <a class="footer-nav__link" href="/Privacy_Policy">Privacy Policy</a>
+            </li>
+            <li class="footer-nav__item ">
+              <a class="footer-nav__link" href="/Contacts_Us">Contacts us</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+    </footer>
+  </body>
+
+</html>
+

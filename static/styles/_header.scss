@@ -1,0 +1,114 @@
+.nav {
+  display: flex;
+  text-transform: uppercase;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1300npx;
+
+  &__link {
+    font-family: $poppins;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 3px;
+    text-align: center;
+    color: $white-color;
+
+    position: relative;
+    text-decoration: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      display: block;
+      height: 2px;
+      width: 100%;
+      border-radius: 4px;
+      background-color: $blue-color;
+
+      transition: transform 0.3s;
+      transform: scale(0);
+      transform-origin: left;
+    }
+
+    &:hover::after {
+      transform: scale(1);
+    }
+  }
+  &__list {
+    display: none;
+
+    @include onTablet {
+      display: none;
+    }
+
+    @include onDesktop {
+      display: flex;
+      list-style: none;
+      gap: 48px;
+    }
+
+    @include onSmallDesktop {
+      display: flex;
+      list-style: none;
+      gap: 48px;
+    }
+  }
+
+}
+
+.header {
+  background-color: $background-color;
+  box-sizing: border-box;
+  height: 100%;
+  padding-top: 48px;
+  border-radius: 29px;
+
+  .header__top {
+    padding: 20px 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 20px;
+  }
+}
+
+body {
+  background: #555;
+}
+
+.main {
+  padding-inline: 200px;
+}
+
+.who-we-are {
+
+  .who-we-are__title {
+    font-size: 32px;
+    font-weight: 600;
+    font-family: $poppins;
+    line-height: 48px;
+    text-align: center;
+    color: $block-names;
+    margin-bottom: 24px;
+    margin-top: 120px;
+
+  }
+
+  .who-we-are__container {
+    padding-bottom: 120px;
+    justify-content: center;
+  }
+
+  .who-we-are__desc {
+    font-family: $open-sans;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 33px;
+    text-align: center;
+    color: #6c788b;
+
+  }
+}

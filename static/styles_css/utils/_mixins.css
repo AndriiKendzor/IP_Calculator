@@ -1,0 +1,21 @@
+button {
+  transition: transform 0.3s;
+}
+button:hover {
+  transform: scale(1.2);
+}
+button button:hover {
+  transition: 0.3s;
+}
+
+img {
+  transition: transform 0.3s;
+}
+img:hover {
+  transform: scale(1.09);
+}
+img img:hover {
+  transition: 0.3s;
+}
+
+/*# sourceMappingURL=_mixins.css.map */
