@@ -43,7 +43,6 @@
       <section class="who-we-are" id="WhoWeAre">
         <h2 class="who-we-are__title">Ip Calculator</h2>
         <div class="who-we-are__container">
-          <p class="who-we-are__desc"><br> <sub>2024</sub></p>
         </div>
       </section>
 
@@ -101,7 +100,8 @@
     <!-- Update the size of the host input -->
     <label for="hostInput">Enter Number of Hosts/Subnets:</label>
     <input type="number" id="hostInput" name="hostCount" placeholder="For example: 50" min="0" style="width: 150;" pattern="[0-9]*">
-    <button type="button" onclick="processNumber()" style="width: 50;">Process</button>
+    <br><br>
+    <button type="button" onclick="processNumber()" style="width: 35%;">Process</button>
 
     <!--<img src="../static/images/NumberIpClass.png" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">-->
   </form>
@@ -229,7 +229,11 @@ document.getElementById('numberInput').addEventListener('input', function() {
 
       <section class="who-we-are" id="WhoWeAre1">
         <div class="who-we-are__container">
-          <p class="who-we-are__desc">This IP calculator is designed to determine the number of hosts and subnets within a given IP of class A, B, or C. The input consists of an IPv4 address represented by four decimal numbers (ranging from 0 to 255), for example: 1st number, dot, 2nd number, dot, 3rd number, dot, 4th number. According to the table (<a href="#imageIpClass" onclick="highlightImage('imageIpClass')">N1</a>), we identify the class to which the IP belongs. Then, the user provides the number of hosts or subnets to be calculated for that IP. The quantity must be greater than 0 and less than the maximum for that class (<a href="#imageNumberIpClass" onclick="highlightImage('imageNumberIpClass')">N2</a>). The result is a table providing information about the 1st, 2nd, 3rd, and last subnet, along with the number of hosts in each subnet - 1st host, last host, and broadcast.</p>
+          <p class="who-we-are__desc">This IP calculator is designed to determine the number of hosts and subnets within a given IP of class A, B, or C.
+            The input consists of an IPv4 address represented by four decimal numbers (ranging from 0 to 255), for example: 1st number, dot, 2nd number, dot, 3rd number, dot, 4th number.
+            According to the table (<a href="#imageIpClass" onclick="highlightImage('imageIpClass')">N1</a>), we identify the class to which the IP belongs.
+            Then, the user provides the number of hosts or subnets to be calculated for that IP. The quantity must be greater than 0 and less than the maximum for that class (<a href="#imageNumberIpClass" onclick="highlightImage('imageNumberIpClass')">N2</a>).
+            The result is a table providing information about the 1st, 2nd, 3rd, and last subnet, along with the number of hosts in each subnet - 1st host, last host, and broadcast.</p>
         </div>
 
         <style>
@@ -264,8 +268,13 @@ document.getElementById('numberInput').addEventListener('input', function() {
           <li>Security: Subnetting mitigates attack risks by confining traffic to subnet areas.</li>
           <li>Easier network management: Working with smaller subnets simplifies network management, facilitating efficient setup, maintenance, and providing isolated areas for internal management.</li>
           <li>Support for different services and user groups: Subnetting aids in allocating specific network parts for particular services or user groups, improving manageability and security.</li>
-          <li>Assistance for the computer networks course exam ;)</li>
-        </ol><br><br><br><br><br></p>
+          <li>Assistance for the computer networks course exam ;)
+      <section class="who-we-are" id="WhoWeAre2">
+        <div class="who-we-are__container">
+          <p class="who-we-are__desc"><br> <sub>2024</sub></p>
+        </div>
+      </section>
+        </ol></p>
       </section>
       </section>
     </main>
@@ -303,4 +312,3 @@ document.getElementById('numberInput').addEventListener('input', function() {
   </body>
 
 </html>
-

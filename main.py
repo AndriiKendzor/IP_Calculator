@@ -32,24 +32,36 @@ def Privacy_Policy():
     return render_template('Privacy_Policy.html', data=data)
 
 
-def validate_ip_address(ip):
-    ip_pattern = re.compile(r'^(\d{1,3}\.){3}\d{1,3}$')
 
-    if ip_pattern.match(ip):
+def validate_ip_address(ip):
+    ip_pattern = re.compile(r'^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$')
+    match = ip_pattern.match(ip)
+
+    first_octet = int(match.group((1)))
+    last_number_ip = int(match.group(4))
+    thrid_number_ip = int(match.group(3))
+    second_number_ip = int(match.group(2))
+
+    if ip_pattern.match(ip) and 0 <= first_octet <= 255 and 0 <= second_number_ip <= 255 and 0 <= thrid_number_ip <= 255 and 0 <= last_number_ip <= 255:
         return True
     else:
         return False
 
 #Перевірка та визначення класи IP
 def get_ip_class(ip):
-    ip_pattern = re.compile(r'^(\d{1,3})\.')
-    first_octet = int(ip_pattern.search(ip).group(1))
+    ip_pattern = re.compile(r'^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$')
+    match = ip_pattern.match(ip)
 
-    if 1 <= first_octet <= 127:
+    first_octet = int(match.group((1)))
+    last_number_ip = int(match.group(4))
+    thrid_number_ip = int(match.group(3))
+    second_number_ip = int(match.group(2))
+
+    if 1 <= first_octet <= 127 and second_number_ip == 0 and thrid_number_ip == 0 and last_number_ip == 0:
         return 'A'
-    elif 128 <= first_octet <= 191:
+    elif 128 <= first_octet <= 191 and thrid_number_ip == 0 and last_number_ip == 0:
         return 'B'
-    elif 192 <= first_octet <= 223:
+    elif 192 <= first_octet <= 223 and last_number_ip == 0:
         return 'C'
     elif 224 <= first_octet <= 239:
         return 'D'
@@ -77,7 +89,7 @@ def find_power_of_two(host_count):
 
 #Перевірка хоста класи C
 def validate_host_C(host_count):
-    if host_count > 254:
+    if host_count > 254 or host_count <= 0:
         print("Invalid number of hosts for ip class C")
         return False
     else:
@@ -126,7 +138,7 @@ def find_c(ip, pow2):
 
 #Перевірка хоста класи B
 def validate_host_B(host_count):
-    if host_count > 65534:
+    if host_count > 65534 or host_count <= 0:
         print("Invalid number of hosts for ip class B")
         return False
     else:
@@ -207,7 +219,7 @@ def find_B(ip, pow2):
 
 #Перевірка хоста класи A
 def validate_host_A(host_count):
-    if host_count > 16777214:
+    if host_count > 16777214 or host_count <= 0:
         print("Invalid number of hosts for ip class A")
         return False
     else:
@@ -316,15 +328,30 @@ def find_A(ip, pow2):
 
 @app.route('/process_another_ip', methods=['POST'])
 def process_ip():
+
     data = request.form.to_dict()
     result = "________"
     ip_address = data.get('ipAddress')
+
+
+    # Проверяем, содержит ли IP-адрес буквы
+    pattern = re.compile(r'^\d+\.\d+\.\d+\.\d+$')
+
+    # Перевірте, чи введений рядок відповідає формату
+    if pattern.match(ip_address):
+        pass
+    else:
+        ip_address = "999.999.999.999"
+
+
 
     # Приймаємо host
     try:
         host_count = int(data.get('hostCount'))
     except ValueError:
-        result = ("The entered value is not an integer.")
+        host_count = 0
+
+
 
 
     ip_class = get_ip_class(ip_address)
@@ -349,7 +376,7 @@ def process_ip():
                 if var == True:
                     result = find_c(ip_address, 2 ** power_of_two)
                 else:
-                    result = "Incorrect number of Hosts/Subnets for class C"
+                    result = "Incorrect number of Hosts for class C"
 
             elif ip_class == 'B':
                 # Перевіряємо
@@ -358,7 +385,7 @@ def process_ip():
                 if var == True:
                     result = find_B(ip_address, 2 ** power_of_two)
                 else:
-                    result = "Incorrect number of Hosts/Subnets for class B"
+                    result = "Incorrect number of Hosts for class B"
 
             elif ip_class == 'A':
                 # Перевіпряємо
@@ -367,16 +394,17 @@ def process_ip():
                 if var == True:
                     result = find_A(ip_address, 2 ** power_of_two)
                 else:
-                    result = "Incorrect number of Hosts/Subnets for class A"
+                    result = "Incorrect number of Hosts for class A"
 
             elif ip_class == 'D':
-                result = ("This IP belongs to the reserved class D")
+                result = "This IP belongs to the reserved class D"
             elif ip_class == 'E':
-                result = ("This IP belongs to the reserved class E")
-            else:
-                result = ("IP  An invalid IP is entered")
+                result = "This IP belongs to the reserved class E"
+            elif ip_class == '-':
+                result = "An invalid IP is entered"
         else:
-            result = "IP  An invalid IP is entered"
+            result = "An invalid IP is entered"
+
 
         return jsonify({'result': result})
 
@@ -387,25 +415,28 @@ def process_ip():
 
 @app.route('/process_ip', methods=['POST'])
 def process_another_ip():
+
     data = request.form.to_dict()
     # Поверніть відповідь (опціонально)
     result = "________"
     # Приймаємо ip
     ip_address = data.get('ipAddress')
-    # Проверяем, содержит ли IP-адрес буквы
-    if re.search('[a-zA-Z]', ip_address):
-        return "Ошибка: IP-адрес не должен содержать буквы"
-    else:
-        # Если IP-адрес не содержит букв, выполняем остальные действия
-        print("IP-адрес не содержит букв:", ip_address)
 
+    # Проверяем, содержит ли IP-адрес буквы
+    pattern = re.compile(r'^\d+\.\d+\.\d+\.\d+$')
+
+    # Перевірте, чи введений рядок відповідає формату
+    if pattern.match(ip_address):
+        pass
+    else:
+        ip_address = "999.999.999.999"
 
 
     # Приймаємо host
     try:
         host_count = int(data.get('hostCount'))
     except ValueError:
-        result = ("The entered value is not an integer.")
+        host_count = 16777215
 
 
     #Степінь 2
@@ -431,6 +462,8 @@ def process_another_ip():
             new_pow = 16 - power_of_two
         elif ip_class == 'A':
             new_pow = 24 - power_of_two
+        else:
+            new_pow = power_of_two
 
         #знайшов баг коли new_pow = 1 або 0 то програма не коректно працює
         if new_pow == 1 or new_pow == 0:
@@ -450,7 +483,7 @@ def process_another_ip():
             if var == True:
                 result = find_c(ip_address, 2**power_of_two)
             else:
-                result = "Incorrect number of hosts for class C"
+                result = "Incorrect number of Subnets for class C"
 
         elif ip_class == 'B':
             # Перевіряємо
@@ -459,7 +492,7 @@ def process_another_ip():
             if var == True:
                 result = find_B(ip_address, 2 ** power_of_two)
             else:
-                result = "Incorrect number of hosts for class B"
+                result = "Incorrect number of Subnets for class B"
 
         elif ip_class == 'A':
             #Перевіпряємо
@@ -468,17 +501,16 @@ def process_another_ip():
             if var == True:
                 result = find_A(ip_address, 2 ** power_of_two)
             else:
-                result = "Incorrect number of hosts for class A"
+                result = "Incorrect number of Subnets for class A"
 
         elif ip_class == 'D':
-            result = ("This IP belongs to the reserved class D")
+            result = "This IP belongs to the reserved class D"
         elif ip_class == 'E':
-            result = ("This IP belongs to the reserved class E")
-        else:
-            result = ("An invalid IP is entered")
+            result = "This IP belongs to the reserved class E"
+        elif ip_class == '-':
+            result = "An invalid IP is entered"
     else:
         result = "An invalid IP is entered"
-
 
 
     return jsonify({'result': result})
