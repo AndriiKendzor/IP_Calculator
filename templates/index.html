@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="../static/styles_css/main.css">
     <link rel="stylesheet" href="./styles/main.scss">
 
+
+
+
   </head>
   <body class="page">
     <script type="text/javascript" src="scripts/main.js"></script>
@@ -40,12 +43,12 @@
       <section class="who-we-are" id="WhoWeAre">
         <h2 class="who-we-are__title">Ip Calculator</h2>
         <div class="who-we-are__container">
-          <p class="who-we-are__desc">Пока хз что написать тут        <br> <sub>2024</sub></p>
         </div>
       </section>
+
+
+
       <section class="calculator" id="Ip_Calculator">
-        <img src="../static/images/IpClass.png" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
-        <br><br><br>
 
 <button id="subNetworksButton" type="button" class="btn btn-outline-primary me-2" style="border-radius: 12%; margin-left: 20px;"><strong>Hosts</strong></button>
 <button id="hostsButton" type="button" class="btn btn-primary" style="border-radius: 12%;"><strong>Sub Networks</strong></button>
@@ -73,7 +76,7 @@
 </script>
 
         <h2 class="who-we-are">Choose your IP class</h2>
-        <td>
+<td>
   <label for="cclass1" class="cbcontainer">
     <input type="radio" name="cclass" id="cclass1" value="a" onclick="popSubnet('a');">
     <span class="rbmark"></span>A
@@ -88,28 +91,30 @@
   </label>
 </td>
 
+<div style="display: flex;">
+<div style="flex: 1;">
 <div class="number-input-container">
   <form id="ipForm">
     <label for="numberInput">Enter IP Address:</label>
     <input type="text" id="numberInput" name="ipAddress" placeholder="For example: 192.168.0.0">
-
     <!-- Update the size of the host input -->
     <label for="hostInput">Enter Number of Hosts/Subnets:</label>
-    <input type="number" id="hostInput" name="hostCount" placeholder="For example: 50" min="0" style="width: 26%;" pattern="[0-9]*">
+    <input type="number" id="hostInput" name="hostCount" placeholder="For example: 50" min="0" style="width: 150;" pattern="[0-9]*">
+    <button type="button" onclick="processNumber()" style="width: 50;">Process</button>
 
-    <button type="button" onclick="processNumber()" style="width: 12%;">Process</button>
-    <label id="resultLabel"></label>
-    <br><br><br><br><br><br>
-    <img src="../static/images/NumberIpClass.png" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
-
-      <section class="who-we-are" id="WhoWeAre1">
-        <div class="who-we-are__container">
-          <p class="who-we-are__desc"> <br> <sub>2024</sub></p>
-        </div>
-      </section>
-
+    <!--<img src="../static/images/NumberIpClass.png" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">-->
   </form>
 </div>
+</div>
+<div style="flex: 1;">
+<div style="display: flex; align-items: center; flex-direction: column; justify-content: flex-end;">
+  <img id="imageIpClass" src="../static/images/IpClass.png" alt="IpClass Image" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
+     <br><br><br><br>
+  <img id="imageNumberIpClass" src="../static/images/NumberIpClass.png" alt="NumberIpClass Image" width="540" height="170" style="border-radius: 15%;margin-top: -100px; margin-left: 100px;">
+</div>
+</div>
+</div>
+<div class="number-input-container"><label id="resultLabel"></label><br><br><br></div>
 
 <script>
   function setDefaultButton() {
@@ -219,6 +224,57 @@ document.getElementById('numberInput').addEventListener('input', function() {
   }
 });
 </script>
+
+
+      <section class="who-we-are" id="WhoWeAre1">
+        <div class="who-we-are__container">
+          <p class="who-we-are__desc">This IP calculator is designed to determine the number of hosts and subnets within a given IP of class A, B, or C.
+            The input consists of an IPv4 address represented by four decimal numbers (ranging from 0 to 255), for example: 1st number, dot, 2nd number, dot, 3rd number, dot, 4th number.
+            According to the table (<a href="#imageIpClass" onclick="highlightImage('imageIpClass')">N1</a>), we identify the class to which the IP belongs.
+            Then, the user provides the number of hosts or subnets to be calculated for that IP. The quantity must be greater than 0 and less than the maximum for that class (<a href="#imageNumberIpClass" onclick="highlightImage('imageNumberIpClass')">N2</a>).
+            The result is a table providing information about the 1st, 2nd, 3rd, and last subnet, along with the number of hosts in each subnet - 1st host, last host, and broadcast.</p>
+        </div>
+
+        <style>
+        .highlighted {
+          box-shadow: 0 0 10px rgba(169, 169, 169, 0.5); /* Optional: Add a box shadow for emphasis */
+          transition: box-shadow 0.3s ease-in-out;
+         }
+         .highlighted1 {
+            box-shadow: none;
+            transition: box-shadow 0.3s ease-in-out;
+         }
+        </style>
+        <script>
+            function highlightImage(imageId) {
+                // Remove the "highlighted" class from all images
+                document.querySelectorAll('img').forEach(img => img.classList.remove('highlighted'));
+
+                // Add the "highlighted" class to the clicked image
+                document.getElementById(imageId).classList.add('highlighted');
+
+                // Remove the "highlighted" class after 0.5 seconds
+                setTimeout(() => {
+                    document.getElementById(imageId).classList.remove('highlighted');
+                }, 500);
+            }
+        </script>
+
+        <p class="who-we-are__desc">Here is where our calculator can be applied:</p>
+        <ol  class="who-we-are__desc" style="text-align: left;" >
+          <li>Efficient use of address space: Due to limitations in IPv4 standards (32-bit address), dividing the network into subnets and distributing addresses optimally utilizes this constrained resource.</li>
+          <li>Traffic management: Subnetting reduces broadcast traffic size, enhancing network efficiency and security by containing traffic within subnets.</li>
+          <li>Security: Subnetting mitigates attack risks by confining traffic to subnet areas.</li>
+          <li>Easier network management: Working with smaller subnets simplifies network management, facilitating efficient setup, maintenance, and providing isolated areas for internal management.</li>
+          <li>Support for different services and user groups: Subnetting aids in allocating specific network parts for particular services or user groups, improving manageability and security.</li>
+          <li>Assistance for the computer networks course exam ;)
+      <section class="who-we-are" id="WhoWeAre2">
+        <div class="who-we-are__container">
+          <p class="who-we-are__desc"><br> <sub>2024</sub></p>
+        </div>
+      </section>
+        </ol></p>
+      </section>
       </section>
     </main>
     <footer class="footer">
@@ -255,4 +311,3 @@ document.getElementById('numberInput').addEventListener('input', function() {
   </body>
 
 </html>
-
