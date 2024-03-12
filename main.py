@@ -68,7 +68,14 @@ def get_ip_class(ip):
     elif 240 <= first_octet <= 255:
         return 'E'
     else:
-        return '-'
+        if 1 <= first_octet <= 127:
+            return '-A'
+        elif 128 <= first_octet <= 191:
+            return '-B'
+        elif 192 <= first_octet <= 223:
+            return '-C'
+
+
 
 #Перевірка хоста класи C
 def validate_host(host_count):
@@ -401,7 +408,16 @@ def process_ip():
             elif ip_class == 'E':
                 result = "This IP belongs to the reserved class E"
             elif ip_class == '-':
-                result = "An invalid IP is entered"
+                result = "An invalid IP is entered---------------хосты"
+            elif ip_class == '-A':
+                result = "The wrong IP address was entered for class A " \
+                         f"\rAn example here - 1.0.0.0"
+            elif ip_class == '-B':
+                result = "The wrong IP address was entered for class B"\
+                         f"\rAn example here - 128.168.0.0"
+            elif ip_class == '-C':
+                result = "The wrong IP address was entered for class С"\
+                         f"\rAn example here - 192.168.1.0"
         else:
             result = "An invalid IP is entered"
 
@@ -419,6 +435,7 @@ def process_another_ip():
     data = request.form.to_dict()
     # Поверніть відповідь (опціонально)
     result = "________"
+
     # Приймаємо ip
     ip_address = data.get('ipAddress')
 
@@ -508,7 +525,16 @@ def process_another_ip():
         elif ip_class == 'E':
             result = "This IP belongs to the reserved class E"
         elif ip_class == '-':
-            result = "An invalid IP is entered"
+            result = "An invalid IP is entered----------------------------подсети"
+        elif ip_class == '-A':
+            result = "The wrong IP address was entered for class A " \
+                     f"\rAn example here - 1.0.0.0"
+        elif ip_class == '-B':
+            result = "The wrong IP address was entered for class B" \
+                     f"\rAn example here - 128.168.0.0"
+        elif ip_class == '-C':
+            result = "The wrong IP address was entered for class С" \
+                     f"\rAn example here - 192.168.1.0"
     else:
         result = "An invalid IP is entered"
 
