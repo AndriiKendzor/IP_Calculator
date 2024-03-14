@@ -1,13 +1,17 @@
-#!/usr/bin/python
-print("Content-type: text/html")
-print("")
-
 
 from flask import Flask, render_template, request, jsonify
+from dotenv import load_dotenv
+import os
 import re
 import math
+from flask_cors import CORS
+load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
+
+#Get the environment variables
+app.config['DEBUG'] = os.environ.get('FLASK_DEBUG')
 
 @app.route('/')
 def index():
@@ -543,7 +547,7 @@ def process_another_ip():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
 
 #binary test
 '''decimal_number = 7
